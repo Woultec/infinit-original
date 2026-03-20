@@ -1,48 +1,67 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand Colors */
-  --color-primary: #1a1a2e;
-  --color-primary-foreground: #ffffff;
+  /* ── Brand Palette (from Infinity 8000 logo) ── */
+  --color-brand-green-dark:   #2d7a0f;   /* outer ring deep green    */
+  --color-brand-green:        #4aa027;   /* primary brand green      */
+  --color-brand-green-light:  #6abf3a;   /* lighter green highlight  */
+  --color-brand-gold:         #f5c518;   /* inner circle gold/yellow */
+  --color-brand-gold-dark:    #c9a010;   /* darker gold for hover    */
+  --color-brand-black:        #1a1a1a;   /* logo arrows / near black */
 
-  --color-secondary: #16213e;
-  --color-secondary-foreground: #ffffff;
+  /* ── Light Mode ── */
+  --color-primary:             #4aa027;
+  --color-primary-foreground:  #ffffff;
 
-  --color-accent: #0f3460;
-  --color-accent-foreground: #ffffff;
+  --color-secondary:           #f5c518;
+  --color-secondary-foreground:#1a1a1a;
 
-  --color-destructive: #e63946;
+  --color-accent:              #6abf3a;
+  --color-accent-foreground:   #ffffff;
+
+  --color-destructive:         #e63946;
   --color-destructive-foreground: #ffffff;
 
-  /* Light mode surfaces */
-  --color-background: #f8f9fa;
-  --color-foreground: #1a1a2e;
-  --color-card: #ffffff;
-  --color-card-foreground: #1a1a2e;
-  --color-muted: #e9ecef;
-  --color-muted-foreground: #6c757d;
-  --color-border: #dee2e6;
+  --color-background:          #f4faf0;   /* very light green tint   */
+  --color-foreground:          #1a1a1a;   /* near-black text         */
 
-  /* Typography */
-  --font-sans: 'Sora', sans-serif;
+  --color-card:                #ffffff;
+  --color-card-foreground:     #1a1a1a;
+
+  --color-muted:               #e6f2df;   /* soft green surface      */
+  --color-muted-foreground:    #4a6040;   /* muted green-grey text   */
+
+  --color-border:              #c8e0be;   /* light green border      */
+
+  /* ── Typography ── */
+  --font-sans:    'Sora', sans-serif;
   --font-display: 'Playfair Display', serif;
 
-  /* Radius */
+  /* ── Radius ── */
   --radius: 0.75rem;
 }
 
+/* ── Dark Mode ── */
 .dark {
-  --color-background: #0d0d1a;
-  --color-foreground: #e8e8f0;
-  --color-card: #13132a;
-  --color-card-foreground: #e8e8f0;
-  --color-muted: #1e1e3a;
-  --color-muted-foreground: #8888aa;
-  --color-border: #2a2a4a;
-  --color-primary: #e94560;
-  --color-primary-foreground: #ffffff;
-  --color-accent: #1e1e3a;
-  --color-accent-foreground: #e8e8f0;
+  --color-primary:             #6abf3a;
+  --color-primary-foreground:  #0f1f0a;
+
+  --color-secondary:           #f5c518;
+  --color-secondary-foreground:#1a1a1a;
+
+  --color-accent:              #2d7a0f;
+  --color-accent-foreground:   #e6f2df;
+
+  --color-background:          #0f1a0b;   /* very dark green-black   */
+  --color-foreground:          #e6f2df;   /* light green-white text  */
+
+  --color-card:                #162210;   /* dark green card surface */
+  --color-card-foreground:     #e6f2df;
+
+  --color-muted:               #1e3318;
+  --color-muted-foreground:    #8ab87a;   /* muted light green       */
+
+  --color-border:              #2d4a22;
 }
 
 @layer base {
@@ -65,6 +84,12 @@
 
   h1, h2, h3 {
     font-family: var(--font-display);
+    color: var(--color-foreground);
+  }
+
+  /* Ensure links are readable */
+  a {
+    color: var(--color-primary);
   }
 }
 
@@ -72,9 +97,25 @@
   .animate-marquee {
     animation: marquee 30s linear infinite;
   }
+
+  /* Gold accent underline for headings */
+  .heading-gold-underline {
+    border-bottom: 3px solid var(--color-brand-gold);
+    padding-bottom: 0.25rem;
+  }
+
+  /* Green gradient background helper */
+  .bg-brand-gradient {
+    background: linear-gradient(
+      135deg,
+      var(--color-brand-green-dark) 0%,
+      var(--color-brand-green) 50%,
+      var(--color-brand-gold-dark) 100%
+    );
+  }
 }
 
 @keyframes marquee {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to   { transform: translateX(-50%); }
 }

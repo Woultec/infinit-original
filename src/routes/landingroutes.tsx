@@ -1,21 +1,22 @@
 import { Routes, Route } from 'react-router-dom'
 import { LandingLayout } from '@layouts/landing'
-import { Home } from '@pages/landing/home'
-import { AboutUs } from '@pages/landing/about-us'
-import { Contacts } from '@pages/landing/contacts'
-import { AdminLogin } from '@pages/landing/admin-login'
+import { HomeSection } from '@pages/landing/home'
+import { AdminLogin }  from '@pages/landing/admin-login'
 import { MemberLogin } from '@pages/landing/member-login'
 
 export function LandingRoutes() {
   return (
     <Routes>
+      {/* ── Full landing page (Navbar + Home + About + Contact + Footer) ── */}
       <Route element={<LandingLayout />}>
-        <Route index element={<Home />} />
-        <Route path="about" element={<AboutUs />} />
-        <Route path="contacts" element={<Contacts />} />
+        <Route index element={<HomeSection />} />
       </Route>
-      <Route path="admin/login" element={<AdminLogin />} />
+
+      {/* ── Auth pages: completely standalone, zero layout wrapping ── */}
       <Route path="member/login" element={<MemberLogin />} />
+
+      {/* Admin login: hidden from UI, only accessible by direct URL /admin/login */}
+      <Route path="admin/login"  element={<AdminLogin />} />
     </Routes>
   )
 }
