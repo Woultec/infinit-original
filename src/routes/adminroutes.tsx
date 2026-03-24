@@ -11,10 +11,11 @@ import { useAuth } from '@hooks/useAuth'
 import { Loader } from '@components/common/Loader'
 
 export function AdminRoutes() {
-  const { user, role, loading } = useAuth()
+  const { user, role, verified, loading } = useAuth()
 
   if (loading) return <Loader />
   if (!user || role !== 'admin') return <Navigate to="/admin/login" replace />
+  if (!verified) return <Navigate to="/admin/login" replace />  // ← blocks unverified
 
   return (
     <Routes>
