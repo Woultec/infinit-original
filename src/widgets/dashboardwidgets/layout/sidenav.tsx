@@ -1,33 +1,16 @@
+// src/widgets/dashboardwidgets/layout/sidenav.tsx
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '@lib/utils'
-import { ROUTES, APP_NAME } from '@lib/constants'
-import type { Role } from '@lib/constants'
-import {
-  LayoutDashboard, Package, Users, User,
-  MessageSquare, Phone, FileText, Newspaper,
-} from 'lucide-react'
+import { APP_NAME } from '@lib/constants'
 
-const adminLinks = [
-  { label: 'Dashboard', href: ROUTES.ADMIN_DASHBOARD, icon: LayoutDashboard },
-  { label: 'Posts', href: ROUTES.ADMIN_POST, icon: FileText },
-  { label: 'Products', href: ROUTES.ADMIN_PRODUCT, icon: Package },
-  { label: 'Members', href: ROUTES.ADMIN_MEMBER, icon: Users },
-  { label: 'Messages', href: ROUTES.ADMIN_MESSAGE, icon: MessageSquare },
-  { label: 'Contacts', href: ROUTES.ADMIN_CONTACT, icon: Phone },
-  { label: 'Profile', href: ROUTES.ADMIN_PROFILE, icon: User },
-]
+type NavLink = {
+  label: string
+  href: string
+  icon: React.ComponentType<{ className?: string }>
+}
 
-const memberLinks = [
-  { label: 'Dashboard', href: ROUTES.MEMBER_DASHBOARD, icon: LayoutDashboard },
-  { label: 'Products', href: ROUTES.MEMBER_PRODUCT, icon: Package },
-  { label: 'News', href: ROUTES.MEMBER_NEWS, icon: Newspaper },
-  { label: 'Messages', href: ROUTES.MEMBER_MESSAGE, icon: MessageSquare },
-  { label: 'Profile', href: ROUTES.MEMBER_PROFILE, icon: User },
-]
-
-export function SideNav({ role }: { role: Role }) {
+export function SideNav({ links }: { links: NavLink[] }) {
   const { pathname } = useLocation()
-  const links = role === 'admin' ? adminLinks : memberLinks
 
   return (
     <aside className="flex w-64 flex-col border-r border-border bg-card">
@@ -39,6 +22,7 @@ export function SideNav({ role }: { role: Role }) {
           <Link
             key={href}
             to={href}
+            aria-current={pathname === href ? 'page' : undefined}
             className={cn(
               'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
               pathname === href

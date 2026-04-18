@@ -1,3 +1,5 @@
+import { LayoutDashboard, Package, Users, User, MessageSquare, Phone, FileText, Newspaper } from 'lucide-react'
+
 /** Application-wide constants */
 
 export const APP_NAME = 'Infinity 8K Corporation'
@@ -37,3 +39,21 @@ export const NAV_LINKS = [
   { label: 'About Us', href: ROUTES.ABOUT },
   { label: 'Contact', href: ROUTES.CONTACTS },
 ] as const
+
+export const ADMIN_NAV_LINKS = [
+  { label: 'Dashboard', href: ROUTES.ADMIN_DASHBOARD, icon: LayoutDashboard },
+  { label: 'Posts', href: ROUTES.ADMIN_POST, icon: FileText },
+  { label: 'Products', href: ROUTES.ADMIN_PRODUCT, icon: Package },
+  { label: 'Members', href: ROUTES.ADMIN_MEMBER, icon: Users },
+  { label: 'Messages', href: ROUTES.ADMIN_MESSAGE, icon: MessageSquare },
+  { label: 'Contacts', href: ROUTES.ADMIN_CONTACT, icon: Phone },
+  { label: 'Profile', href: ROUTES.ADMIN_PROFILE, icon: User },
+]
+
+export const MEMBER_NAV_LINKS = [
+  { label: 'Dashboard', href: ROUTES.MEMBER_DASHBOARD, icon: LayoutDashboard },
+  { label: 'Products', href: ROUTES.MEMBER_PRODUCT, icon: Package },
+  { label: 'News', href: ROUTES.MEMBER_NEWS, icon: Newspaper },
+  { label: 'Messages', href: ROUTES.MEMBER_MESSAGE, icon: MessageSquare },
+  { label: 'Profile', href: ROUTES.MEMBER_PROFILE, icon: User },
+]

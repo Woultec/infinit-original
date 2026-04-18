@@ -12,15 +12,28 @@ interface AuthState {
 }
 
 async function checkVerified(userId: string): Promise<boolean> {
-  const { data } = await supabase
-    .from('confirmation_codes')
-    .select('confirmed')
-    .eq('user_id', userId)
-    .eq('confirmed', true)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single()
-  return !!data?.confirmed
+  try {
+    const { data, error } = await supabase
+      .from('confirmation_codes')
+      .select('confirmed')
+      .eq('user_id', userId)
+      .eq('confirmed', true)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+
+    if (error) {
+      // If error is PGRST116 (no rows), it just means not verified yet
+      if (error.code === 'PGRST116') return false
+      console.error('Check verified error:', error)
+      return false
+    }
+
+    return !!data?.confirmed
+  } catch (err) {
+    console.error('Unexpected error checking verification:', err)
+    return false
+  }
 }
 
 export function useAuth(): AuthState {
@@ -32,19 +45,39 @@ export function useAuth(): AuthState {
   })
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const user = session?.user ?? null
-      const verified = user ? await checkVerified(user.id) : false
-      setState({ user, role: getUserRole(user), verified, loading: false })
+    let mounted = true
+
+    const updateState = async (session: any) => {
+      try {
+        const user = session?.user ?? null
+        const verified = user ? await checkVerified(user.id) : false
+        const role = getUserRole(user)
+
+        if (mounted) {
+          setState({ user, role, verified, loading: false })
+        }
+      } catch (err) {
+        console.error('Auth update error:', err)
+        if (mounted) {
+          setState(prev => ({ ...prev, loading: false }))
+        }
+      }
+    }
+
+    // Initial check
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      updateState(session)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const user = session?.user ?? null
-      const verified = user ? await checkVerified(user.id) : false
-      setState({ user, role: getUserRole(user), verified, loading: false })
+    // Listen for changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      updateState(session)
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
   }, [])
 
   return state

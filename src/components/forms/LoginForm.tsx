@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn, signOut, sendConfirmationCode, verifyConfirmationCode, getUserRole } from '@services/auth'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@hooks/useAuth'
 import type { Role } from '@lib/constants'
 import { Input } from '@components/ui/Input'
 import { Button } from '@components/ui/Button'
@@ -11,6 +12,7 @@ interface Props {
 
 export function LoginForm({ role: expectedRole }: Props) {
   const navigate = useNavigate()
+  const { user, verified, role: currentRole, loading: authLoading } = useAuth()
 
   const [form, setForm] = useState({ email: '', password: '' })
   const [code, setCode] = useState('')
@@ -18,6 +20,19 @@ export function LoginForm({ role: expectedRole }: Props) {
   const [userId, setUserId] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+
+  // If already logged in but not verified, jump to verify step
+  useEffect(() => {
+    if (user && !verified && currentRole === expectedRole && step === 'login') {
+      setUserId(user.id)
+      setForm(prev => ({ ...prev, email: user.email || '' }))
+      setStep('verify')
+    } else if (user && verified && currentRole === expectedRole) {
+      navigate(expectedRole === 'admin' ? '/admin' : '/member', { replace: true })
+    }
+  }, [user, verified, currentRole, expectedRole, step, navigate])
+
+  if (authLoading) return <div className="text-center py-4 text-muted-foreground italic">Checking session...</div>
 
   // Step 1 — sign in + send code
   const handleLogin = async (e: React.FormEvent) => {

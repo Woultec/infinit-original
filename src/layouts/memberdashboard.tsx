@@ -1,12 +1,13 @@
 import { Outlet } from 'react-router-dom'
 import { SideNav } from '@widgets/dashboardwidgets/layout/sidenav'
+import { MEMBER_NAV_LINKS } from '@lib/constants'
 import { DashboardNavbar } from '@widgets/dashboardwidgets/layout/navbar'
 import { DashboardFooter } from '@widgets/dashboardwidgets/layout/footer'
 
 export function MemberDashboardLayout() {
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden">
-      <SideNav role="member" />
+      <SideNav links={MEMBER_NAV_LINKS} />
       <div className="flex flex-1 flex-col overflow-hidden">
         <DashboardNavbar />
         <main className="flex-1 overflow-y-auto p-6">

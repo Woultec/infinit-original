@@ -9,10 +9,10 @@ import { useAuth } from '@hooks/useAuth'
 import { Loader } from '@components/common/Loader'
 
 export function MemberRoutes() {
-  const { user, role, loading } = useAuth()
+  const { user, role, verified, loading } = useAuth()
 
   if (loading) return <Loader />
-  if (!user || role !== 'member') return <Navigate to="/member/login" replace />
+  if (!user || role !== 'member' || !verified) return <Navigate to="/member/login" replace />
 
   return (
     <Routes>
