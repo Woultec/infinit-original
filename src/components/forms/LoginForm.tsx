@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { signIn, signOut, sendConfirmationCode, verifyConfirmationCode, getUserRole } from '@services/auth'
+import { signOut, getUserRole, sendSupabaseOTP, verifySupabaseOTP } from '@services/auth'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@hooks/useAuth'
 import type { Role } from '@lib/constants'
@@ -17,14 +17,12 @@ export function LoginForm({ role: expectedRole }: Props) {
   const [form, setForm] = useState({ email: '', password: '' })
   const [code, setCode] = useState('')
   const [step, setStep] = useState<'login' | 'verify'>('login')
-  const [userId, setUserId] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
   // If already logged in but not verified, jump to verify step
   useEffect(() => {
     if (user && !verified && currentRole === expectedRole && step === 'login') {
-      setUserId(user.id)
       setForm(prev => ({ ...prev, email: user.email || '' }))
       setStep('verify')
     } else if (user && verified && currentRole === expectedRole) {
@@ -34,37 +32,37 @@ export function LoginForm({ role: expectedRole }: Props) {
 
   if (authLoading) return <div className="text-center py-4 text-muted-foreground italic">Checking session...</div>
 
-  // Step 1 — sign in + send code
+  // Step 1 — send OTP
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('loading')
     setErrorMsg('')
     try {
-      const data = await signIn(form.email, form.password)
-      const userRole = getUserRole(data.user)
-
-      if (userRole !== expectedRole) {
-        await signOut()
-        throw new Error(`This portal is for ${expectedRole}s only.`)
-      }
-
-      await sendConfirmationCode(data.user.id, data.user.email!)
-      setUserId(data.user.id)
+      await sendSupabaseOTP(form.email)
       setStep('verify')
       setStatus('idle')
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Login failed')
+      setErrorMsg(err instanceof Error ? err.message : 'Failed to send verification code')
       setStatus('error')
     }
   }
 
-  // Step 2 — verify code + redirect
+  // Step 2 — verify OTP + check role + redirect
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('loading')
     setErrorMsg('')
     try {
-      await verifyConfirmationCode(userId, code)
+      const { user } = await verifySupabaseOTP(form.email, code)
+      
+      if (!user) throw new Error('Verification failed')
+      
+      const userRole = getUserRole(user)
+      if (userRole !== expectedRole) {
+        await signOut()
+        throw new Error(`This portal is for ${expectedRole}s only.`)
+      }
+
       navigate(expectedRole === 'admin' ? '/admin' : '/member', { replace: true })
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : 'Invalid or expired code')
@@ -76,8 +74,7 @@ export function LoginForm({ role: expectedRole }: Props) {
     setStatus('loading')
     setErrorMsg('')
     try {
-      const data = await signIn(form.email, form.password)
-      await sendConfirmationCode(data.user.id, data.user.email!)
+      await sendSupabaseOTP(form.email)
       setStatus('idle')
     } catch {
       setErrorMsg('Failed to resend code')

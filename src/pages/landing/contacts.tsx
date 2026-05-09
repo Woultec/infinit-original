@@ -17,7 +17,7 @@ const faqs = [
   { q: 'Can I refer someone to the community?', a: 'Absolutely! Existing members can refer qualified individuals. Ask your member representative about our referral program.' },
 ]
 
-export function ContactSection() {
+export function InquirySection() {
   const [form, setForm]     = useState<ContactFormData>({ name: '', email: '', subject: '', message: '' })
   const [errors, setErrors] = useState<Partial<ContactFormData>>({})
   const [loading, setLoading] = useState(false)
@@ -40,10 +40,17 @@ export function ContactSection() {
     }
     setLoading(true)
     try {
-      await supabase.from('contacts').insert([result.data])
+      const { error } = await supabase.from('inquiries').insert([{
+        ...result.data,
+        status: 'pending'
+      }])
+      
+      if (error) throw error
+      
       setSuccess(true)
-    } catch (_) {
-      setSuccess(true)
+    } catch (err: any) {
+      console.error('Inquiry submission error:', err)
+      alert(err.message || 'Failed to send inquiry. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -60,7 +67,7 @@ export function ContactSection() {
           <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full border border-white/10 -translate-x-1/3" />
         </div>
         <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
-          <span className="inline-block text-[#f5c518] font-semibold text-sm tracking-widest uppercase mb-4">Get in Touch</span>
+          <span className="inline-block text-[#f5c518] font-semibold text-sm tracking-widest uppercase mb-4">Send an Inquiry</span>
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-5"
             style={{ fontFamily: 'Playfair Display, serif' }}>
             Let's Start Your<br />
@@ -82,7 +89,7 @@ export function ContactSection() {
             <div className="lg:col-span-2 space-y-5">
               <div>
                 <h3 className="text-2xl font-bold text-[#1a1a1a] mb-2"
-                  style={{ fontFamily: 'Playfair Display, serif' }}>Contact Information</h3>
+                  style={{ fontFamily: 'Playfair Display, serif' }}>Inquiry Information</h3>
                 <p className="text-[#4a6040] text-sm leading-relaxed">
                   Reach us directly or fill out the form and we'll get back to you within one business day.
                 </p>

@@ -34,9 +34,18 @@ export function ContactForm() {
 
     setLoading(true)
     try {
-      await supabase.from('contacts').insert([result.data])
+      const { error } = await supabase.from('inquiries').insert([{
+        ...result.data,
+        status: 'pending'
+      }])
+
+      if (error) throw error
+
       setSuccess(true)
       setForm({ name: '', email: '', subject: '', message: '' })
+    } catch (err: any) {
+      console.error('Inquiry submission error:', err)
+      alert(err.message || 'Failed to send inquiry. Please try again.')
     } finally {
       setLoading(false)
     }

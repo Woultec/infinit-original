@@ -11,28 +11,23 @@ interface AuthState {
   loading: boolean
 }
 
-async function checkVerified(userId: string): Promise<boolean> {
+async function getProfileRole(userId: string): Promise<Role | null> {
   try {
     const { data, error } = await supabase
-      .from('confirmation_codes')
-      .select('confirmed')
-      .eq('user_id', userId)
-      .eq('confirmed', true)
-      .order('created_at', { ascending: false })
-      .limit(1)
+      .from('profiles')
+      .select('role')
+      .eq('id', userId)
       .single()
 
     if (error) {
-      // If error is PGRST116 (no rows), it just means not verified yet
-      if (error.code === 'PGRST116') return false
-      console.error('Check verified error:', error)
-      return false
+      console.error('Error fetching profile role:', error)
+      return null
     }
 
-    return !!data?.confirmed
+    return data?.role as Role
   } catch (err) {
-    console.error('Unexpected error checking verification:', err)
-    return false
+    console.error('Unexpected error fetching profile role:', err)
+    return null
   }
 }
 
@@ -50,11 +45,25 @@ export function useAuth(): AuthState {
     const updateState = async (session: any) => {
       try {
         const user = session?.user ?? null
-        const verified = user ? await checkVerified(user.id) : false
-        const role = getUserRole(user)
+        if (!user) {
+          if (mounted) setState({ user: null, role: null, verified: false, loading: false })
+          return
+        }
+
+        // Fetch role from profiles table (authoritative) and fallback to metadata
+        const profileRole = await getProfileRole(user.id)
+        
+        const metadataRole = getUserRole(user)
+        let role = profileRole || metadataRole
+
+        // Fix: If database defaults to 'member' but metadata explicitly says 'admin'
+        if (profileRole === 'member' && metadataRole === 'admin') {
+          role = 'admin'
+        }
 
         if (mounted) {
-          setState({ user, role, verified, loading: false })
+          // In Supabase OTP, if you have a user, you are verified
+          setState({ user, role, verified: true, loading: false })
         }
       } catch (err) {
         console.error('Auth update error:', err)

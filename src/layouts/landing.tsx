@@ -2,11 +2,11 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { Navbar } from '@widgets/landingwidgets/layout/navbar'
 import { Footer } from '@widgets/landingwidgets/layout/footer'
 import { AboutSection } from '@pages/landing/about-us'
-import { ContactSection } from '@pages/landing/contacts'
+import { InquirySection } from '@pages/landing/contacts'
 
 /**
  * LandingLayout:
- * - On "/" → renders Navbar + HomeSection (via Outlet) + AboutSection + ContactSection + Footer
+ * - On "/" → renders Navbar + HomeSection (via Outlet) + AboutSection + InquirySection + Footer
  * - On "/member/login" or "/admin/login" → renders ONLY the page (no navbar, no footer, no extra sections)
  *   (those routes are outside this layout in landingroutes.tsx)
  *
@@ -25,7 +25,7 @@ export function LandingLayout() {
       <main className="flex-1">
         <Outlet />        {/* HomeSection renders here */}
         <AboutSection />  {/* id="about" */}
-        <ContactSection />{/* id="contact" */}
+        <InquirySection />{/* id="contact" */}
       </main>
       <Footer />
     </div>

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { APP_NAME, NAV_LINKS } from '@lib/constants'
+import { APP_NAME, NAV_LINKS, ROUTES } from '@lib/constants'
 import { Mail, Phone, MapPin } from 'lucide-react'
 
 export function Footer() {
@@ -62,7 +62,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/contacts" className="text-white/60 hover:text-white text-sm transition-colors">
+                <Link to={ROUTES.INQUIRY} className="text-white/60 hover:text-white text-sm transition-colors">
                   Join the Community
                 </Link>
               </li>

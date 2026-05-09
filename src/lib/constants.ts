@@ -1,10 +1,10 @@
-import { LayoutDashboard, Package, Users, User, MessageSquare, Phone, FileText, Newspaper } from 'lucide-react'
+import { LayoutDashboard, Package, Users, User, Goal, Phone, FileText, Newspaper, MessageSquare } from 'lucide-react'
 
 /** Application-wide constants */
-
 export const APP_NAME = 'Infinity 8K Corporation'
 export const APP_TAGLINE = 'A community of 8,000 extraordinary members'
 export const MAX_MEMBERS = 8000
+export const SUPER_ADMIN_EMAIL = 'infinity8000corporation@gmail.com'
 
 export const ROLES = ['admin', 'member'] as const
 export type Role = (typeof ROLES)[number]
@@ -13,7 +13,7 @@ export const ROUTES = {
   // Landing
   HOME: '/',
   ABOUT: '/about',
-  CONTACTS: '/contacts',
+  INQUIRY: '/inquiry',
   ADMIN_LOGIN: '/admin/login',
   MEMBER_LOGIN: '/member/login',
 
@@ -23,8 +23,8 @@ export const ROUTES = {
   ADMIN_PRODUCT: '/admin/products',
   ADMIN_MEMBER: '/admin/members',
   ADMIN_PROFILE: '/admin/profile',
-  ADMIN_MESSAGE: '/admin/messages',
-  ADMIN_CONTACT: '/admin/contacts',
+  ADMIN_GOAL: '/admin/goals',
+  ADMIN_INQUIRY: '/admin/inquiries',
 
   // Member
   MEMBER_DASHBOARD: '/member/dashboard',
@@ -32,12 +32,13 @@ export const ROUTES = {
   MEMBER_PROFILE: '/member/profile',
   MEMBER_MESSAGE: '/member/messages',
   MEMBER_NEWS: '/member/news',
+  MEMBER_ROADMAP: '/member/roadmap',
 } as const
 
 export const NAV_LINKS = [
   { label: 'Home', href: ROUTES.HOME },
   { label: 'About Us', href: ROUTES.ABOUT },
-  { label: 'Contact', href: ROUTES.CONTACTS },
+  { label: 'Inquiry', href: ROUTES.INQUIRY },
 ] as const
 
 export const ADMIN_NAV_LINKS = [
@@ -45,8 +46,8 @@ export const ADMIN_NAV_LINKS = [
   { label: 'Posts', href: ROUTES.ADMIN_POST, icon: FileText },
   { label: 'Products', href: ROUTES.ADMIN_PRODUCT, icon: Package },
   { label: 'Members', href: ROUTES.ADMIN_MEMBER, icon: Users },
-  { label: 'Messages', href: ROUTES.ADMIN_MESSAGE, icon: MessageSquare },
-  { label: 'Contacts', href: ROUTES.ADMIN_CONTACT, icon: Phone },
+  { label: 'Goals', href: ROUTES.ADMIN_GOAL, icon: Goal },
+  { label: 'Inquiries', href: ROUTES.ADMIN_INQUIRY, icon: MessageSquare },
   { label: 'Profile', href: ROUTES.ADMIN_PROFILE, icon: User },
 ]
 
@@ -54,6 +55,7 @@ export const MEMBER_NAV_LINKS = [
   { label: 'Dashboard', href: ROUTES.MEMBER_DASHBOARD, icon: LayoutDashboard },
   { label: 'Products', href: ROUTES.MEMBER_PRODUCT, icon: Package },
   { label: 'News', href: ROUTES.MEMBER_NEWS, icon: Newspaper },
+  { label: 'Roadmap', href: ROUTES.MEMBER_ROADMAP, icon: Goal },
   { label: 'Messages', href: ROUTES.MEMBER_MESSAGE, icon: MessageSquare },
   { label: 'Profile', href: ROUTES.MEMBER_PROFILE, icon: User },
 ]
