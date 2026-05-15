@@ -1,4 +1,6 @@
 import { useAuth } from '@hooks/useAuth'
+import { ProfileForm } from '@widgets/dashboardwidgets/profile/ProfileForm'
+import { ChangePasswordForm } from '@widgets/dashboardwidgets/profile/ChangePasswordForm'
 
 export function AdminProfile() {
   const { user, role, verified, loading } = useAuth()
@@ -15,10 +17,20 @@ export function AdminProfile() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Admin Profile</h1>
-        <p className="text-muted-foreground">Verification and session details for your account.</p>
+        <p className="text-muted-foreground">Manage your personal information and session details.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
+        {/* Profile Editing Form */}
+        <div className="md:col-span-2">
+          <ProfileForm />
+        </div>
+
+        {/* Change Password Form */}
+        <div className="md:col-span-2">
+          <ChangePasswordForm />
+        </div>
+
         {/* Session Information */}
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
           <h2 className="text-lg font-semibold mb-4">Session Status</h2>
@@ -26,18 +38,6 @@ export function AdminProfile() {
             <div className="flex justify-between">
               <span className="text-muted-foreground">Email:</span>
               <span className="font-medium">{user?.email || 'N/A'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Full Name:</span>
-              <span className="font-medium">{user?.user_metadata?.full_name || 'N/A'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Username:</span>
-              <span className="font-medium">@{user?.user_metadata?.username || 'N/A'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Contacts:</span>
-              <span className="font-medium">{user?.user_metadata?.contacts || 'N/A'}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Role:</span>
@@ -56,32 +56,6 @@ export function AdminProfile() {
           </div>
         </div>
 
-        {/* Technical Details */}
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4">Technical Details</h2>
-          <div className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">User ID:</span>
-              <span className="font-mono text-[10px] truncate max-w-[200px]">{user?.id || 'N/A'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Last Sign In:</span>
-              <span className="text-xs">{user?.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleString() : 'N/A'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Auth Provider:</span>
-              <span className="text-xs capitalize">{user?.app_metadata?.provider || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Raw Data (For Debugging) */}
-      <div className="rounded-xl border border-border bg-muted/30 p-6 overflow-hidden">
-        <h2 className="text-sm font-semibold mb-2">Raw User Metadata</h2>
-        <pre className="text-[10px] bg-card p-4 rounded border border-border overflow-x-auto">
-          {JSON.stringify(user?.user_metadata || {}, null, 2)}
-        </pre>
       </div>
     </div>
   )

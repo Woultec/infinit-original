@@ -14,36 +14,44 @@ serve(async (req) => {
   try {
     const { to, name, subject, zoomLink } = await req.json()
 
-    // SMTP Configuration
-    const SMTP_HOSTNAME = 'smtp.gmail.com'
-    const SMTP_PORT = 465 // Using SSL/TLS port
-    const SMTP_USERNAME = Deno.env.get('SMTP_USERNAME')
-    const SMTP_PASSWORD = Deno.env.get('SMTP_PASSWORD')
+    // Use the same SMTP credentials configured in Supabase Auth settings
+    const SMTP_HOSTNAME = Deno.env.get('SMTP_HOST') || 'smtp.gmail.com'
+    const SMTP_PORT = Number(Deno.env.get('SMTP_PORT')) || 465
+    const SMTP_USER = Deno.env.get('SMTP_SUPERADMIN') || Deno.env.get('SMTP_USERNAME')
+    const SMTP_PASS = Deno.env.get('SMTP_PASSWORD')
 
-    if (!SMTP_USERNAME || !SMTP_PASSWORD) {
-      throw new Error('SMTP credentials not found in secrets')
+    if (!SMTP_USER || !SMTP_PASS) {
+      throw new Error(
+        `SMTP credentials missing. Found SMTP_SUPERADMIN=${!!Deno.env.get('SMTP_SUPERADMIN')}, SMTP_USERNAME=${!!Deno.env.get('SMTP_USERNAME')}, SMTP_PASSWORD=${!!Deno.env.get('SMTP_PASSWORD')}`
+      )
     }
 
-    // Initialize Denomailer client (Modern Deno-compatible library)
+    console.log(`Connecting to ${SMTP_HOSTNAME}:${SMTP_PORT} as ${SMTP_USER}`)
+
     const client = new SMTPClient({
       connection: {
         hostname: SMTP_HOSTNAME,
         port: SMTP_PORT,
         tls: true,
         auth: {
-          username: SMTP_USERNAME,
-          password: SMTP_PASSWORD,
+          username: SMTP_USER,
+          password: SMTP_PASS,
         },
       },
     })
 
     await client.send({
-      from: SMTP_USERNAME,
+      from: SMTP_USER,
       to: to,
       subject: `Meeting Invitation: ${subject}`,
       content: `Hello ${name}, your meeting link is: ${zoomLink}`,
       html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 12px;">
+        <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px;">
+          <div style="text-align: center; margin-bottom: 24px;">
+            <div style="display: inline-block; background: linear-gradient(135deg, #2d7a0f, #4aa027); color: white; font-weight: bold; font-size: 18px; padding: 10px 20px; border-radius: 8px;">
+              ∞ Infinity 8K
+            </div>
+          </div>
           <h2 style="color: #1a1a1a;">Hello ${name},</h2>
           <p style="color: #4b5563; line-height: 1.6;">
             Thank you for your inquiry regarding <strong>"${subject}"</strong>.
@@ -51,17 +59,17 @@ serve(async (req) => {
           <p style="color: #4b5563; line-height: 1.6;">
             We would like to invite you to a virtual meeting to discuss this further.
           </p>
-          <div style="margin: 30px 0; text-align: center;">
-            <a href="${zoomLink}" style="background-color: #4aa027; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+          <div style="margin: 32px 0; text-align: center;">
+            <a href="${zoomLink}" style="display: inline-block; background-color: #4aa027; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 16px;">
               Join Zoom Meeting
             </a>
           </div>
           <p style="color: #6b7280; font-size: 14px;">
-            Link: <a href="${zoomLink}">${zoomLink}</a>
+            Or copy this link: <a href="${zoomLink}" style="color: #4aa027;">${zoomLink}</a>
           </p>
           <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
           <p style="color: #9ca3af; font-size: 12px; text-align: center;">
-            &copy; Infinity 8K Corporation
+            &copy; Infinity 8K Corporation — All rights reserved.
           </p>
         </div>
       `,
@@ -70,13 +78,13 @@ serve(async (req) => {
     await client.close()
 
     return new Response(
-      JSON.stringify({ message: 'Email sent successfully via Denomailer' }),
+      JSON.stringify({ message: 'Email sent successfully' }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     )
   } catch (error) {
-    console.error('SMTP Error:', error)
+    console.error('SMTP Error Details:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: String(error?.message || error) }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
     )
   }

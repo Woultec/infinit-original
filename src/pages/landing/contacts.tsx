@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { MapPin, Phone, Mail, Clock, ArrowRight, CheckCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { MapPin, Phone, Mail, Clock, ArrowRight, CheckCircle, Calendar, AlertCircle } from 'lucide-react'
 import { contactSchema, type ContactFormData } from '@lib/validations'
 import { supabase } from '@services/supabase'
+import { getUnavailableDates, type UnavailableDate } from '@services/inquiryService'
 
 const contactInfo = [
   { icon: MapPin, label: 'Office Address', value: 'Quezon City, Metro Manila, Philippines' },
@@ -19,10 +20,34 @@ const faqs = [
 
 export function InquirySection() {
   const [form, setForm]     = useState<ContactFormData>({ name: '', email: '', subject: '', message: '' })
+  const [preferredDate, setPreferredDate] = useState('')
   const [errors, setErrors] = useState<Partial<ContactFormData>>({})
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [unavailableDates, setUnavailableDates] = useState<UnavailableDate[]>([])
+
+  useEffect(() => {
+    fetchUnavailableDates()
+  }, [])
+
+  async function fetchUnavailableDates() {
+    try {
+      const data = await getUnavailableDates()
+      setUnavailableDates(data)
+    } catch (err) {
+      // Silently fail — the date picker will just work without blocked dates
+      console.error('Could not fetch unavailable dates:', err)
+    }
+  }
+
+  function isDateUnavailable(dateStr: string) {
+    return unavailableDates.some(ud => ud.date === dateStr)
+  }
+
+  function getTodayStr() {
+    return new Date().toISOString().split('T')[0]
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(p => ({ ...p, [e.target.name]: e.target.value }))
@@ -38,12 +63,24 @@ export function InquirySection() {
       setErrors(fe)
       return
     }
+
+    // Check if preferred date is unavailable
+    if (preferredDate && isDateUnavailable(preferredDate)) {
+      alert('The selected preferred date is unavailable. Please choose another date.')
+      return
+    }
+
     setLoading(true)
     try {
-      const { error } = await supabase.from('inquiries').insert([{
+      const insertData: Record<string, unknown> = {
         ...result.data,
         status: 'pending'
-      }])
+      }
+      if (preferredDate) {
+        insertData.scheduled_date = preferredDate
+      }
+
+      const { error } = await supabase.from('inquiries').insert([insertData])
       
       if (error) throw error
       
@@ -125,7 +162,7 @@ export function InquirySection() {
                     Thank you for reaching out. Our team will review your message and contact you within 24 hours.
                   </p>
                   <button
-                    onClick={() => { setSuccess(false); setForm({ name: '', email: '', subject: '', message: '' }) }}
+                    onClick={() => { setSuccess(false); setForm({ name: '', email: '', subject: '', message: '' }); setPreferredDate('') }}
                     className="inline-flex items-center gap-2 text-[#4aa027] font-semibold hover:underline text-sm">
                     Send another inquiry <ArrowRight className="w-4 h-4" />
                   </button>
@@ -150,18 +187,47 @@ export function InquirySection() {
                         {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                       </div>
                     </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-sm font-semibold text-[#1a1a1a]">Subject</label>
-                      <select name="subject" value={form.subject} onChange={handleChange}
-                        className={`h-11 rounded-xl border px-4 text-sm bg-[#f4faf0] text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#4aa027]/40 focus:border-[#4aa027] transition-colors ${errors.subject ? 'border-red-400' : 'border-[#c8e0be]'}`}>
-                        <option value="">Select a topic...</option>
-                        <option>Membership Inquiry</option>
-                        <option>Investment Opportunities</option>
-                        <option>Partnership Proposal</option>
-                        <option>General Question</option>
-                        <option>Other</option>
-                      </select>
-                      {errors.subject && <span className="text-red-500 text-xs">{errors.subject}</span>}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-semibold text-[#1a1a1a]">Subject</label>
+                        <select name="subject" value={form.subject} onChange={handleChange}
+                          className={`h-11 rounded-xl border px-4 text-sm bg-[#f4faf0] text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#4aa027]/40 focus:border-[#4aa027] transition-colors ${errors.subject ? 'border-red-400' : 'border-[#c8e0be]'}`}>
+                          <option value="">Select a topic...</option>
+                          <option>Membership Inquiry</option>
+                          <option>Investment Opportunities</option>
+                          <option>Partnership Proposal</option>
+                          <option>General Question</option>
+                          <option>Other</option>
+                        </select>
+                        {errors.subject && <span className="text-red-500 text-xs">{errors.subject}</span>}
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-semibold text-[#1a1a1a]">
+                          Preferred Date <span className="font-normal text-[#8ab87a]">(optional)</span>
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="date"
+                            value={preferredDate}
+                            onChange={e => {
+                              const val = e.target.value
+                              if (val && isDateUnavailable(val)) {
+                                alert('This date is unavailable. Please choose another date.')
+                                return
+                              }
+                              setPreferredDate(val)
+                            }}
+                            min={getTodayStr()}
+                            className="h-11 w-full rounded-xl border border-[#c8e0be] px-4 text-sm bg-[#f4faf0] text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#4aa027]/40 focus:border-[#4aa027] transition-colors"
+                          />
+                        </div>
+                        {unavailableDates.length > 0 && (
+                          <div className="flex items-start gap-1.5 text-[10px] text-amber-600">
+                            <AlertCircle className="h-3 w-3 shrink-0 mt-0.5" />
+                            <span>Some dates may be unavailable for scheduling.</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-semibold text-[#1a1a1a]">Message</label>

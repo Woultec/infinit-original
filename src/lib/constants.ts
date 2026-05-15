@@ -48,7 +48,6 @@ export const ADMIN_NAV_LINKS = [
   { label: 'Members', href: ROUTES.ADMIN_MEMBER, icon: Users },
   { label: 'Goals', href: ROUTES.ADMIN_GOAL, icon: Goal },
   { label: 'Inquiries', href: ROUTES.ADMIN_INQUIRY, icon: MessageSquare },
-  { label: 'Profile', href: ROUTES.ADMIN_PROFILE, icon: User },
 ]
 
 export const MEMBER_NAV_LINKS = [
@@ -57,5 +56,4 @@ export const MEMBER_NAV_LINKS = [
   { label: 'News', href: ROUTES.MEMBER_NEWS, icon: Newspaper },
   { label: 'Roadmap', href: ROUTES.MEMBER_ROADMAP, icon: Goal },
   { label: 'Messages', href: ROUTES.MEMBER_MESSAGE, icon: MessageSquare },
-  { label: 'Profile', href: ROUTES.MEMBER_PROFILE, icon: User },
 ]

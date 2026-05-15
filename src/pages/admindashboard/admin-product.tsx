@@ -35,6 +35,7 @@ export function AdminProduct() {
   const [saving, setSaving]         = useState(false)
   const [error, setError]           = useState("")
   const [search, setSearch]         = useState("")
+  const [editingId, setEditingId]   = useState<string | null>(null)
   const [filterCat, setFilterCat]   = useState("")
   const [filterStatus, setFilterStatus] = useState("")
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'active'>('all')
@@ -68,7 +69,24 @@ export function AdminProduct() {
     setPreview(null)
     setError("")
     setShowForm(false)
+    setEditingId(null)
     if (fileRef.current) fileRef.current.value = ""
+  }
+
+  function handleEditClick(product: Product) {
+    setEditingId(product.id)
+    setForm({
+      name: product.name,
+      sku: product.sku,
+      category: product.category,
+      price: product.price.toString(),
+      stock: product.stock.toString(),
+      status: product.status,
+    })
+    setPreview(product.image_url || null)
+    setImageFile(null)
+    setShowForm(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function handleAdd() {
@@ -80,17 +98,32 @@ export function AdminProduct() {
       let image_url: string | undefined
       if (imageFile) image_url = await uploadProductImage(imageFile)
 
-      const newProduct = await addProduct({
-        ...form,
-        status: isSuperAdmin ? form.status : 'Pending', // Force 'Pending' for non-super admins
-        price: parseFloat(form.price),
-        stock: parseInt(form.stock),
-        image_url,
-      })
-      setProducts(prev => [newProduct, ...prev])
+      if (editingId) {
+        const updated = await updateProduct(editingId, {
+          ...form,
+          status: isSuperAdmin ? form.status : 'Pending', // Non-super admins might get reverted to pending on edit depending on requirements, but here we enforce it
+          price: parseFloat(form.price),
+          stock: parseInt(form.stock),
+          ...(image_url ? { image_url } : {}) // Only update image_url if a new image was uploaded
+        })
+        setProducts(prev => prev.map(p => p.id === editingId ? updated : p))
+      } else {
+        const newProduct = await addProduct({
+          ...form,
+          status: isSuperAdmin ? form.status : 'Pending', // Force 'Pending' for non-super admins
+          price: parseFloat(form.price),
+          stock: parseInt(form.stock),
+          image_url,
+        })
+        setProducts(prev => [newProduct, ...prev])
+      }
       resetForm()
     } catch (err: any) {
-      setError(err.message ?? "Something went wrong.")
+      if (err.code === '23505' || err.message?.includes('products_sku_key')) {
+        setError("A product with this SKU already exists. Please use a unique SKU.")
+      } else {
+        setError(err.message ?? "Something went wrong.")
+      }
     } finally {
       setSaving(false)
     }
@@ -137,10 +170,10 @@ export function AdminProduct() {
         </button>
       </div>
 
-      {/* Add Product Form */}
+      {/* Add/Edit Product Form */}
       {showForm && (
         <div className="border rounded-xl p-5 mb-6 bg-card">
-          <p className="font-medium mb-4">New product</p>
+          <p className="font-medium mb-4">{editingId ? 'Edit product' : 'New product'}</p>
           <div className="grid grid-cols-2 gap-3 mb-3">
             {[
               { key:"name",  label:"Product name", placeholder:"e.g. Wireless Headphones", type:"text"   },
@@ -205,7 +238,7 @@ export function AdminProduct() {
             <button onClick={resetForm} className="px-4 py-1.5 text-sm border rounded-md hover:bg-muted">Cancel</button>
             <button onClick={handleAdd} disabled={saving}
               className="px-4 py-1.5 text-sm bg-foreground text-background rounded-md disabled:opacity-50">
-              {saving ? "Saving..." : "Save product"}
+              {saving ? "Saving..." : (editingId ? "Update product" : "Save product")}
             </button>
           </div>
         </div>
@@ -326,7 +359,7 @@ export function AdminProduct() {
                     </div>
                   ) : (
                     <div className="flex gap-2">
-                      <button className="flex-1 text-xs border rounded-md py-1.5 hover:bg-muted">Edit</button>
+                      <button onClick={() => handleEditClick(p)} className="flex-1 text-xs border rounded-md py-1.5 hover:bg-muted">Edit</button>
                       <button onClick={() => handleDelete(p)}
                         className="text-xs border rounded-md px-3 py-1.5 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors">
                         Delete
