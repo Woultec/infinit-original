@@ -7,6 +7,7 @@ export interface Post {
   body: string
   audience: 'all' | 'members' | 'admins'
   status: 'Active' | 'Pending' | 'Rejected' | 'Draft'
+  is_published?: boolean
   image_url?: string
   created_at: string
   published_at?: string
@@ -15,6 +16,26 @@ export interface Post {
     last_name: string
     email: string
   }
+}
+
+/** Live announcements for the member news feed */
+export async function getMemberAnnouncements() {
+  const { data, error } = await supabase
+    .from('announcements')
+    .select(`
+      *,
+      profiles:created_by (
+        first_name,
+        last_name
+      )
+    `)
+    .eq('status', 'Active')
+    .in('audience', ['all', 'members'])
+    .order('published_at', { ascending: false, nullsFirst: false })
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  return data as Post[]
 }
 
 export async function getPosts() {

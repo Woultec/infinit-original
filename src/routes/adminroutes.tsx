@@ -7,6 +7,8 @@ import { AdminProduct } from '@pages/admindashboard/admin-product'
 import { AdminMember } from '@pages/admindashboard/admin-member'
 import { AdminGoal } from '@pages/admindashboard/admin-goal'
 import { AdminInquiry } from '@pages/admindashboard/admin-inquiry'
+import { AdminOrders } from '@pages/admindashboard/admin-orders'
+import { AdminWallet } from '@pages/admindashboard/admin-wallet'
 import { AdminProfile } from '@pages/admindashboard/admin-profile'
 import { useAuth } from '@hooks/useAuth'
 import { Loader } from '@components/common/Loader'
@@ -24,6 +26,8 @@ export function AdminRoutes() {
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="posts" element={<AdminPost />} />
         <Route path="products" element={<AdminProduct />} />
+        <Route path="orders" element={<AdminOrders />} />
+        <Route path="wallet" element={<AdminWallet />} />
         <Route path="members" element={<AdminMember />} />
         <Route path="goals" element={<AdminGoal />} />
         <Route path="inquiries" element={<AdminInquiry />} />

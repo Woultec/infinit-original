@@ -20,7 +20,7 @@ const statusStyles: Record<string, string> = {
 const stockColor = (n: number) =>
   n === 0 ? "text-red-500" : n < 20 ? "text-amber-600" : "text-foreground"
 
-const emptyForm = { name:"", sku:"", category:"", price:"", stock:"", status:"Pending" as Product["status"] }
+const emptyForm = { name:"", sku:"", category:"", price:"", member_price:"", coin_price:"", stock:"", status:"Pending" as Product["status"] }
 
 export function AdminProduct() {
   const { user } = useAuth()
@@ -80,6 +80,8 @@ export function AdminProduct() {
       sku: product.sku,
       category: product.category,
       price: product.price.toString(),
+      member_price: product.member_price.toString(),
+      coin_price: (product.coin_price ?? 0).toString(),
       stock: product.stock.toString(),
       status: product.status,
     })
@@ -90,7 +92,7 @@ export function AdminProduct() {
   }
 
   async function handleAdd() {
-    if (!form.name || !form.sku || !form.price || !form.stock || !form.category) {
+    if (!form.name || !form.sku || !form.price || !form.member_price || !form.stock || !form.category) {
       setError("Please fill in all required fields."); return
     }
     setSaving(true)
@@ -103,6 +105,8 @@ export function AdminProduct() {
           ...form,
           status: isSuperAdmin ? form.status : 'Pending', // Non-super admins might get reverted to pending on edit depending on requirements, but here we enforce it
           price: parseFloat(form.price),
+          member_price: parseFloat(form.member_price),
+          coin_price: parseFloat(form.coin_price) || 0,
           stock: parseInt(form.stock),
           ...(image_url ? { image_url } : {}) // Only update image_url if a new image was uploaded
         })
@@ -112,6 +116,8 @@ export function AdminProduct() {
           ...form,
           status: isSuperAdmin ? form.status : 'Pending', // Force 'Pending' for non-super admins
           price: parseFloat(form.price),
+          member_price: parseFloat(form.member_price),
+          coin_price: parseFloat(form.coin_price) || 0,
           stock: parseInt(form.stock),
           image_url,
         })
@@ -178,7 +184,9 @@ export function AdminProduct() {
             {[
               { key:"name",  label:"Product name", placeholder:"e.g. Wireless Headphones", type:"text"   },
               { key:"sku",   label:"SKU",           placeholder:"e.g. WH-1001",             type:"text"   },
-              { key:"price", label:"Price (₱)",    placeholder:"0.00",                      type:"number" },
+              { key:"price", label:"Regular Price (₱)", placeholder:"0.00",                 type:"number" },
+              { key:"member_price", label:"Member Price (₱)", placeholder:"0.00",           type:"number" },
+              { key:"coin_price", label:"Coin Price (∞, 0=auto 10% off)", placeholder:"0", type:"number" },
               { key:"stock", label:"Stock",         placeholder:"0",                        type:"number" },
             ].map(f => (
               <div key={f.key}>
@@ -331,9 +339,21 @@ export function AdminProduct() {
                 )}
 
                 <div className="border-t pt-2 flex justify-between items-end mt-auto">
-                  <div>
-                    <p className="text-xs text-muted-foreground">Price</p>
-                    <p className="font-semibold text-sm">₱{p.price.toLocaleString()}</p>
+                  <div className="flex flex-col gap-1">
+                    <div>
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold">Regular</p>
+                      <p className="font-semibold text-sm line-through text-muted-foreground">₱{p.price.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-primary uppercase font-bold">Member</p>
+                      <p className="font-semibold text-sm text-primary">₱{p.member_price.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-amber-700 uppercase font-bold">Coin</p>
+                      <p className="font-semibold text-sm text-amber-700">
+                        {(p.coin_price ?? 0) > 0 ? `${p.coin_price} ∞` : 'Auto −10%'}
+                      </p>
+                    </div>
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-muted-foreground">Stock</p>

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Users, User, Goal, Phone, FileText, Newspaper, MessageSquare } from 'lucide-react'
+import { LayoutDashboard, Package, Users, User, Goal, Phone, FileText, Newspaper, MessageSquare, ShoppingBag, Coins, Wallet } from 'lucide-react'
 
 /** Application-wide constants */
 export const APP_NAME = 'Infinity 8K Corporation'
@@ -25,12 +25,15 @@ export const ROUTES = {
   ADMIN_PROFILE: '/admin/profile',
   ADMIN_GOAL: '/admin/goals',
   ADMIN_INQUIRY: '/admin/inquiries',
+  ADMIN_ORDERS: '/admin/orders',
+  ADMIN_WALLET: '/admin/wallet',
 
   // Member
   MEMBER_DASHBOARD: '/member/dashboard',
   MEMBER_PRODUCT: '/member/products',
+  MEMBER_ORDER: '/member/orders',
+  MEMBER_WALLET: '/member/wallet',
   MEMBER_PROFILE: '/member/profile',
-  MEMBER_MESSAGE: '/member/messages',
   MEMBER_NEWS: '/member/news',
   MEMBER_ROADMAP: '/member/roadmap',
 } as const
@@ -45,6 +48,8 @@ export const ADMIN_NAV_LINKS = [
   { label: 'Dashboard', href: ROUTES.ADMIN_DASHBOARD, icon: LayoutDashboard },
   { label: 'Posts', href: ROUTES.ADMIN_POST, icon: FileText },
   { label: 'Products', href: ROUTES.ADMIN_PRODUCT, icon: Package },
+  { label: 'Orders', href: ROUTES.ADMIN_ORDERS, icon: ShoppingBag },
+  { label: 'Wallet', href: ROUTES.ADMIN_WALLET, icon: Wallet },
   { label: 'Members', href: ROUTES.ADMIN_MEMBER, icon: Users },
   { label: 'Goals', href: ROUTES.ADMIN_GOAL, icon: Goal },
   { label: 'Inquiries', href: ROUTES.ADMIN_INQUIRY, icon: MessageSquare },
@@ -53,7 +58,8 @@ export const ADMIN_NAV_LINKS = [
 export const MEMBER_NAV_LINKS = [
   { label: 'Dashboard', href: ROUTES.MEMBER_DASHBOARD, icon: LayoutDashboard },
   { label: 'Products', href: ROUTES.MEMBER_PRODUCT, icon: Package },
+  { label: 'Orders', href: ROUTES.MEMBER_ORDER, icon: ShoppingBag },
+  { label: 'Wallet', href: ROUTES.MEMBER_WALLET, icon: Coins },
   { label: 'News', href: ROUTES.MEMBER_NEWS, icon: Newspaper },
   { label: 'Roadmap', href: ROUTES.MEMBER_ROADMAP, icon: Goal },
-  { label: 'Messages', href: ROUTES.MEMBER_MESSAGE, icon: MessageSquare },
 ]

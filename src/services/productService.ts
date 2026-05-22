@@ -7,6 +7,8 @@ export interface Product {
   sku: string
   category: string
   price: number
+  member_price: number
+  coin_price?: number
   stock: number
   status: 'Active' | 'Draft' | 'Archived' | 'Pending' | 'Rejected'
   image_url?: string
