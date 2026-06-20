@@ -11,13 +11,11 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-brand-gradient flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>∞</span>
-              </div>
+              <img src="/logo.png" alt="Infinity 8000 Corporation" className="w-10 h-10 rounded-full object-cover shadow-lg" />
               <span className="font-bold text-lg">{APP_NAME}</span>
             </div>
             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
-              An exclusive investment and real estate community — limited to 8,000 visionary members worldwide.
+              An exclusive investment and real estate community — para sa hanggang 8,000 na miyembro sa buong mundo.
             </p>
             <div className="mt-6 space-y-2">
               {[

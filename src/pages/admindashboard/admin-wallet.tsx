@@ -4,6 +4,7 @@ import { SUPER_ADMIN_EMAIL } from '@lib/constants'
 import {
   getPendingTopUps,
   getAllPaymentChannelsForAdmin,
+  getAllWalletTransactions,
   updatePaymentChannel,
   uploadPaymentQr,
   reviewTopUp,
@@ -22,6 +23,7 @@ import {
   QrCode,
   ClipboardList,
   ExternalLink,
+  List,
 } from 'lucide-react'
 
 const CHANNEL_LABELS: Record<PaymentChannelId, string> = {
@@ -35,10 +37,12 @@ export function AdminWallet() {
   const { user } = useAuth()
   const isSuperAdmin = user?.email === SUPER_ADMIN_EMAIL
 
-  const [activeTab, setActiveTab] = useState<'verify' | 'setup'>('verify')
+  const [activeTab, setActiveTab] = useState<'verify' | 'setup' | 'all'>('verify')
   const [pending, setPending] = useState<WalletTransaction[]>([])
   const [channels, setChannels] = useState<WalletPaymentChannel[]>([])
   const [loading, setLoading] = useState(true)
+  const [allTransactions, setAllTransactions] = useState<WalletTransaction[]>([])
+  const [allTxLoading, setAllTxLoading] = useState(false)
   const [reviewingId, setReviewingId] = useState<string | null>(null)
   const [setupChannel, setSetupChannel] = useState<PaymentChannelId>('gcash')
   const [savingChannel, setSavingChannel] = useState(false)
@@ -83,6 +87,15 @@ export function AdminWallet() {
       setQrFile(null)
     }
   }, [setupChannel, channels])
+
+  useEffect(() => {
+    if (activeTab !== 'all' || !isSuperAdmin) return
+    setAllTxLoading(true)
+    getAllWalletTransactions()
+      .then(setAllTransactions)
+      .catch(err => console.error(err))
+      .finally(() => setAllTxLoading(false))
+  }, [activeTab, isSuperAdmin])
 
   async function handleReview(id: string, approve: boolean) {
     setReviewingId(id)
@@ -133,7 +146,9 @@ export function AdminWallet() {
       <div>
         <h1 className="text-2xl font-bold tracking-tight">{INFINITY_COIN.NAME} wallet</h1>
         <p className="text-muted-foreground text-sm mt-1">
-          Verify member payments and manage QR payment setup (Super Admin only)
+          {activeTab === 'all'
+            ? 'View all wallet transactions across all members'
+            : 'Verify member payments and manage QR payment setup (Super Admin only)'}
         </p>
       </div>
 
@@ -141,6 +156,9 @@ export function AdminWallet() {
         {[
           { id: 'verify' as const, label: 'Verify payments', icon: ClipboardList },
           { id: 'setup' as const, label: 'Payment setup', icon: QrCode },
+          ...(isSuperAdmin
+            ? [{ id: 'all' as const, label: 'All Transactions', icon: List }]
+            : []),
         ].map(tab => (
           <button
             key={tab.id}
@@ -162,7 +180,7 @@ export function AdminWallet() {
         ))}
       </div>
 
-      {!isSuperAdmin && (
+      {!isSuperAdmin && activeTab !== 'all' && (
         <div className="flex items-center gap-2 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900">
           <Shield className="h-4 w-4 shrink-0" />
           Only the Super Admin can verify reference numbers and edit payment QR codes.
@@ -255,6 +273,88 @@ export function AdminWallet() {
             ))}
           </div>
         )
+      ) : activeTab === 'all' ? (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">All Wallet Transactions</h2>
+            {!allTxLoading && (
+              <span className="text-xs text-muted-foreground">
+                {allTransactions.length} transaction{allTransactions.length !== 1 ? 's' : ''}
+              </span>
+            )}
+          </div>
+
+          {allTxLoading ? (
+            <p className="py-16 text-center text-sm text-muted-foreground">Loading transactions...</p>
+          ) : allTransactions.length === 0 ? (
+            <div className="py-20 text-center border-2 border-dashed rounded-2xl bg-muted/20">
+              <Coins className="h-10 w-10 mx-auto text-muted-foreground/30 mb-4" />
+              <p className="text-muted-foreground text-sm">No transactions found.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto rounded-2xl border bg-card">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b bg-muted/30 text-left">
+                    <th className="px-4 py-3 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">User</th>
+                    <th className="px-4 py-3 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Type</th>
+                    <th className="px-4 py-3 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Amount</th>
+                    <th className="px-4 py-3 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Status</th>
+                    <th className="px-4 py-3 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Reference</th>
+                    <th className="px-4 py-3 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Channel</th>
+                    <th className="px-4 py-3 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Date</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {allTransactions.map(tx => (
+                    <tr key={tx.id} className="hover:bg-muted/20 transition-colors">
+                      <td className="px-4 py-3">
+                        <p className="font-medium">
+                          {tx.profiles ? `${tx.profiles.first_name} ${tx.profiles.last_name}` : '—'}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {tx.profiles?.email ?? tx.user_id.slice(0, 8)}
+                        </p>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-muted">
+                          {tx.type.replace(/_/g, ' ')}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 font-semibold">
+                        {formatCoins(tx.amount)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`inline-block text-[10px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                            tx.status === 'completed'
+                              ? 'bg-green-100 text-green-800'
+                              : tx.status === 'pending'
+                                ? 'bg-amber-100 text-amber-800'
+                                : 'bg-red-100 text-red-700'
+                          }`}
+                        >
+                          {tx.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs max-w-[140px] truncate" title={tx.reference_number}>
+                        {tx.reference_number ?? '—'}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-muted-foreground">
+                        {tx.payment_channel ? (CHANNEL_LABELS[tx.payment_channel as PaymentChannelId] ?? tx.payment_channel) : '—'}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
+                        {new Date(tx.created_at).toLocaleDateString()}
+                        <br />
+                        {new Date(tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       ) : !isSuperAdmin ? (
         <div className="py-16 text-center border-2 border-dashed rounded-2xl bg-muted/20">
           <Shield className="h-10 w-10 mx-auto text-muted-foreground/30 mb-4" />

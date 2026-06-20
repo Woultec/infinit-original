@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Users, User, Goal, Phone, FileText, Newspaper, MessageSquare, ShoppingBag, Coins, Wallet } from 'lucide-react'
+import { LayoutDashboard, Package, Users, User, Goal, Phone, FileText, Newspaper, MessageSquare, ShoppingBag, Coins, Wallet, Layers, TrendingDown } from 'lucide-react'
 
 /** Application-wide constants */
 export const APP_NAME = 'Infinity 8K Corporation'
@@ -33,6 +33,8 @@ export const ROUTES = {
   MEMBER_PRODUCT: '/member/products',
   MEMBER_ORDER: '/member/orders',
   MEMBER_WALLET: '/member/wallet',
+  MEMBER_STOCKS: '/member/stocks',
+  MEMBER_SALES: '/member/sales',
   MEMBER_PROFILE: '/member/profile',
   MEMBER_NEWS: '/member/news',
   MEMBER_ROADMAP: '/member/roadmap',
@@ -58,6 +60,8 @@ export const ADMIN_NAV_LINKS = [
 export const MEMBER_NAV_LINKS = [
   { label: 'Dashboard', href: ROUTES.MEMBER_DASHBOARD, icon: LayoutDashboard },
   { label: 'Products', href: ROUTES.MEMBER_PRODUCT, icon: Package },
+  { label: 'Stocks', href: ROUTES.MEMBER_STOCKS, icon: Layers },
+  { label: 'Sales', href: ROUTES.MEMBER_SALES, icon: TrendingDown },
   { label: 'Orders', href: ROUTES.MEMBER_ORDER, icon: ShoppingBag },
   { label: 'Wallet', href: ROUTES.MEMBER_WALLET, icon: Coins },
   { label: 'News', href: ROUTES.MEMBER_NEWS, icon: Newspaper },

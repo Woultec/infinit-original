@@ -7,6 +7,8 @@ import { MemberWallet } from '@pages/memberdashboard/member-wallet'
 import { MemberProfile } from '@pages/memberdashboard/member-profile'
 import { MemberNews } from '@pages/memberdashboard/member-news'
 import { MemberGoal } from '@pages/memberdashboard/member-goal'
+import { MemberStockPage } from '@pages/memberdashboard/member-stock'
+import { MemberSalesPage } from '@pages/memberdashboard/member-sales'
 import { useAuth } from '@hooks/useAuth'
 import { Loader } from '@components/common/Loader'
 
@@ -19,13 +21,16 @@ export function MemberRoutes() {
   return (
     <Routes>
       <Route element={<MemberDashboardLayout />}>
-        <Route index element={<MemberDashboard />} />
+        <Route index element={<Navigate to="/member/dashboard" replace />} />
+        <Route path="dashboard" element={<MemberDashboard />} />
         <Route path="products" element={<MemberProduct />} />
         <Route path="orders" element={<MemberOrder />} />
         <Route path="wallet" element={<MemberWallet />} />
         <Route path="profile" element={<MemberProfile />} />
         <Route path="news" element={<MemberNews />} />
         <Route path="roadmap" element={<MemberGoal />} />
+        <Route path="stocks" element={<MemberStockPage />} />
+        <Route path="sales" element={<MemberSalesPage />} />
       </Route>
     </Routes>
   )

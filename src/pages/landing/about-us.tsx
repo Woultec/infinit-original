@@ -1,17 +1,16 @@
 import { ArrowRight, Target, Eye, Heart, Shield } from 'lucide-react'
 
 const values = [
-  { icon: Target, title: 'Mission', text: "To create a powerful and exclusive community of 8,000 investors and real estate enthusiasts who support each other in building lasting, generational wealth." },
-  { icon: Eye,    title: 'Vision',  text: "To be the Philippines' most trusted and impactful private investment community — where every member thrives and grows together." },
-  { icon: Heart,  title: 'Values',  text: 'Integrity, community, and excellence guide every decision we make. We believe wealth is best built together, with transparency and trust at the core.' },
+  { icon: Target, title: 'Mission', text: "Lumikha ng isang makapangyarihang at exclusive community ng 8,000 investors at real estate enthusiasts na nagsusuportahan sa isa't isa sa pagbuo ng lasting, generational wealth." },
+  { icon: Eye,    title: 'Vision',  text: "Maging ang Pilipinas' most trusted at impactful private investment community — kung saan bawat miyembro ay umuunlad at lumalaki magkakasama." },
+  { icon: Heart,  title: 'Values',  text: 'Ang integrity, community, at excellence ang gumagabay sa bawat desisyon namin. Naniniwala kami na ang wealth ay pinakamabuting itatag magkakasama, na may transparency at trust sa sentro.' },
 ]
 
-const milestones = [
-  { year: '2020', title: 'Founded',           desc: 'Infinity 8000 Corporation was established with a vision to democratize access to exclusive investment opportunities.' },
-  { year: '2021', title: 'First 500 Members', desc: "Our founding members joined and helped shape the community's values and direction from the very beginning." },
-  { year: '2022', title: 'First Major Deals', desc: 'Members collectively facilitated over 100 real estate transactions through the power of our network.' },
-  { year: '2023', title: 'Community Expansion', desc: 'Crossed 1,000 verified members and launched our digital member portal for seamless community engagement.' },
-  { year: '2024', title: 'Growing Strong',    desc: 'Over 1,200 active investors and 340+ deals facilitated. The community continues to grow toward our 8,000-member vision.' },
+const milestones = [                { year: '2020', title: 'Founded',           desc: 'Ang Infinity 8000 Corporation ay itinatag sa isang vision na i-democratize ang access sa exclusive investment opportunities.' },
+  { year: '2021', title: 'First 500 Members', desc: 'Sumali ang aming founding members at nakatulong sa paghubog sa community values at direction mula sa simula.' },
+  { year: '2022', title: 'First Major Deals', desc: 'Kolektibong na-facilitate ng mga members ang mahigit 100 real estate transactions sa pamamagitan ng lakas ng aming network.' },
+  { year: '2023', title: 'Community Expansion', desc: 'Umabot sa 1,000 verified members at inilunsad ang aming digital member portal para sa seamless community engagement.' },
+  { year: '2024', title: 'Growing Strong',    desc: 'Mahigit 1,200 active investors at 340+ deals facilitated. Patuloy na lumalaki ang community tungo sa aming 8,000-member vision.' },
 ]
 
 const team = [
@@ -36,12 +35,12 @@ export function AboutSection() {
           <span className="inline-block text-[#f5c518] font-semibold text-sm tracking-widest uppercase mb-4">About Us</span>
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
             style={{ fontFamily: 'Playfair Display, serif' }}>
-            More Than a Company.<br />
-            <span className="text-[#f5c518]">A Movement.</span>
+          Higit Pa sa Isang Kumpanya.<br />
+            <span className="text-[#f5c518]">Isang Kilusan.</span>
           </h2>
           <p className="text-white/75 text-lg max-w-2xl mx-auto leading-relaxed">
-            Infinity 8000 Corporation was built on the belief that real, lasting wealth
-            is created through community, trust, and exclusive access — not by going it alone.
+            Ang Infinity 8000 Corporation ay itinatag sa paniniwalang ang tunay na, lasting wealth
+            ay nilikha sa pamamagitan ng community, trust, at exclusive access — hindi sa pamamagitan ng pag-iisa.
           </p>
         </div>
       </div>
@@ -83,25 +82,19 @@ export function AboutSection() {
                 <span className="text-[#4aa027]">Curated Circle</span>
               </h3>
               <div className="space-y-4 text-[#4a6040] leading-relaxed text-sm">
-                <p>Large enough to create a powerful network with diverse expertise and resources — small enough to remain exclusive, trusted, and personal.</p>
-                <p>In numerology, the number 8 represents abundance, success, and infinite possibilities. Combined with 000, it symbolizes limitless potential waiting to be unlocked.</p>
-                <p>Every slot in our community represents a human connection — an investor, a dreamer, a builder. When all 8,000 are united, the possibilities are truly infinite.</p>
-              </div>
-              <a href="#contact"
+                <p>Sapat na malaki upang lumikha ng isang powerful network na may diverse expertise at resources — sapat na maliit upang manatiling exclusive, trusted, at personal.</p>
+                <p>Sa numerology, ang numerong 8 ay kumakatawan sa abundance, success, at infinite possibilities. Kombinado sa 000, sumisimbolo ito ng limitless potential na naghihintay na ma-unlock.</p>
+                <p>Bawat slot sa aming community ay kumakatawan sa isang human connection — isang investor, isang dreamer, isang builder. Kapag nagkaisa ang lahat ng 8,000, ang mga possibilities ay tunay na infinite.</p>
+              </div>                <a href="#contact"
                 className="group inline-flex items-center gap-3 bg-[#4aa027] hover:bg-[#2d7a0f] text-white font-bold text-sm px-7 py-3.5 rounded-xl mt-8 transition-all duration-200 shadow-md hover:shadow-lg">
-                Claim Your Spot <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                Kunin ang Iyong Slot <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
             </div>
             {/* Circular badge */}
             <div className="flex items-center justify-center">
               <div className="relative w-72 h-72">
-                <div className="absolute inset-0 rounded-full bg-brand-gradient shadow-2xl shadow-[#4aa027]/30 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-6xl font-bold text-[#f5c518]"
-                      style={{ fontFamily: 'Playfair Display, serif' }}>8K</div>
-                    <div className="text-white/90 text-sm font-medium tracking-widest uppercase mt-1">Members</div>
-                    <div className="text-white/60 text-xs mt-1">Maximum Capacity</div>
-                  </div>
+                <div className="absolute inset-0 rounded-full shadow-2xl shadow-[#4aa027]/30 flex items-center justify-center overflow-hidden border-4 border-[#c8e0be]">
+                  <img src="/logo.png" alt="Infinity 8000 Corporation" className="w-full h-full object-cover" />
                 </div>
                 <div className="absolute inset-0 rounded-full border-2 border-[#4aa027]/30 scale-110" />
                 <div className="absolute inset-0 rounded-full border border-[#4aa027]/15 scale-125" />

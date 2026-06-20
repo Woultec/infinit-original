@@ -63,3 +63,8 @@ export async function getAllProfiles() {
   if (error) throw error
   return data as Profile[]
 }
+
+export async function deleteUser(userId: string): Promise<void> {
+  const { error } = await supabase.rpc('delete_user', { p_user_id: userId })
+  if (error) throw error
+}

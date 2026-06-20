@@ -196,3 +196,21 @@ export async function reviewTopUp(transactionId: string, approve: boolean) {
 
   if (error) throw error
 }
+
+export async function getAllWalletTransactions(limit = 100) {
+  const { data, error } = await supabase
+    .from('wallet_transactions')
+    .select(`
+      *,
+      profiles:user_id (
+        first_name,
+        last_name,
+        email
+      )
+    `)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (error) throw error
+  return data as WalletTransaction[]
+}

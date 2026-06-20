@@ -12,10 +12,10 @@ const contactInfo = [
 ]
 
 const faqs = [
-  { q: 'How do I become a member?',           a: 'Submit an inquiry through this page. Our team will review your application and contact you within 24–48 hours to discuss next steps.' },
-  { q: 'Is there a membership fee?',           a: 'Yes. Membership fees vary depending on the tier you apply for. Details will be shared during your consultation with our team.' },
-  { q: 'What happens after I submit an inquiry?', a: "You'll receive a confirmation email and one of our representatives will reach out to schedule a call or meeting with you." },
-  { q: 'Can I refer someone to the community?', a: 'Absolutely! Existing members can refer qualified individuals. Ask your member representative about our referral program.' },
+  { q: 'Paano ako magiging member?',           a: 'Mag-submit ng inquiry sa pamamagitan ng page na ito. Susuriin ng aming team ang iyong application at makikipag-ugnayan sa iyo within 24–48 hours para pag-usapan ang next steps.' },
+  { q: 'May membership fee ba?',           a: 'Opo. Ang membership fees ay nag-iiba depende sa tier na a-applyan mo. Ibabahagi ang mga detalye during ng consultation mo sa aming team.' },
+  { q: 'Ano ang mangyayari pagkatapos kong mag-submit ng inquiry?', a: 'Makakatanggap ka ng confirmation email at makikipag-ugnayan ang isa sa aming representatives para mag-schedule ng call or meeting sa iyo.' },
+  { q: 'Maaari ko bang i-refer ang isang tao sa community?', a: 'Syempre! Ang existing members ay maaagng mag-refer ng qualified individuals. Tanungin ang iyong member representative tungkol sa aming referral program.' },
 ]
 
 export function InquirySection() {
@@ -107,12 +107,12 @@ export function InquirySection() {
           <span className="inline-block text-[#f5c518] font-semibold text-sm tracking-widest uppercase mb-4">Send an Inquiry</span>
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-5"
             style={{ fontFamily: 'Playfair Display, serif' }}>
-            Let's Start Your<br />
+            Simulan Natin ang Iyong<br />
             <span className="text-[#f5c518]">Journey Together</span>
           </h2>
           <p className="text-white/75 text-lg">
-            Have questions about membership or investment opportunities?
-            Our team is ready to guide you every step of the way.
+            May mga tanong tungkol sa membership o investment opportunities?
+            Handa ang aming team na gabayan ka every step of the way.
           </p>
         </div>
       </div>
@@ -128,7 +128,7 @@ export function InquirySection() {
                 <h3 className="text-2xl font-bold text-[#1a1a1a] mb-2"
                   style={{ fontFamily: 'Playfair Display, serif' }}>Inquiry Information</h3>
                 <p className="text-[#4a6040] text-sm leading-relaxed">
-                  Reach us directly or fill out the form and we'll get back to you within one business day.
+                  Makipag-ugnayan sa amin directly or punan ang form and we'll get back to you within one business day.
                 </p>
               </div>
               {contactInfo.map(({ icon: Icon, label, value }) => (
@@ -145,7 +145,7 @@ export function InquirySection() {
               <div className="bg-[#4aa027] rounded-xl p-5 text-white">
                 <div className="text-3xl font-bold mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>24 hrs</div>
                 <div className="text-white/90 font-medium text-sm">Average Response Time</div>
-                <div className="text-white/60 text-xs mt-1">Our team responds to all inquiries within one business day.</div>
+                <div className="text-white/60 text-xs mt-1">Sinasagot ng aming team ang lahat ng inquiries within one business day.</div>
               </div>
             </div>
 
@@ -159,7 +159,7 @@ export function InquirySection() {
                   <h3 className="text-2xl font-bold text-[#1a1a1a] mb-2"
                     style={{ fontFamily: 'Playfair Display, serif' }}>Inquiry Received!</h3>
                   <p className="text-[#4a6040] mb-6 max-w-sm text-sm">
-                    Thank you for reaching out. Our team will review your message and contact you within 24 hours.
+                    Salamat sa pakikipag-ugnayan. Susuriin ng aming team ang iyong message and we'll contact you within 24 hours.
                   </p>
                   <button
                     onClick={() => { setSuccess(false); setForm({ name: '', email: '', subject: '', message: '' }); setPreferredDate('') }}

@@ -19,16 +19,16 @@ function useCounter(target: number, duration = 2000, start = false) {
 }
 
 const features = [
-  { icon: Building2, title: 'Real Estate Community', desc: 'Access exclusive property deals, investment opportunities, and market insights available only to our 8,000 members.' },
-  { icon: TrendingUp, title: 'Growth-Focused Network', desc: 'Connect with fellow investors, share strategies, and grow your portfolio within a curated community of like-minded individuals.' },
-  { icon: Shield, title: 'Verified & Secure', desc: 'Every member is vetted. Your investments and personal information are protected by enterprise-grade security.' },
-  { icon: Star, title: 'Premium Benefits', desc: 'Enjoy priority access to new listings, member-exclusive events, and dedicated support from our corporate team.' },
+  { icon: Building2, title: 'Real Estate Community', desc: 'Makakuha ng exclusive property deals, investment opportunities, at market insights na para lamang sa aming 8,000 na miyembro.' },
+  { icon: TrendingUp, title: 'Growth-Focused Network', desc: 'Kumonekta sa mga kapwa investors, mag-share ng strategies, at palaguin ang iyong portfolio sa loob ng isang curated community.' },
+  { icon: Shield, title: 'Verified & Secure', desc: 'Bawat miyembro ay verified. Ang iyong mga investments at personal na impormasyon ay protektado ng enterprise-grade security.' },
+  { icon: Star, title: 'Premium Benefits', desc: 'Enjoy priority access sa mga bagong listings, member-exclusive events, at dedicated support mula sa aming corporate team.' },
 ]
 
 const testimonials = [
-  { name: 'Ricardo M.', role: 'Real Estate Investor', text: 'Infinity 8000 opened doors I never knew existed. The community alone is worth every peso.' },
-  { name: 'Maria Santos', role: 'Business Owner', text: "The network here is incredible. I've closed three deals through connections I made as a member." },
-  { name: 'Jose Reyes', role: 'Property Developer', text: "A truly exclusive community. The quality of members and opportunities here is unmatched." },
+  { name: 'Ricardo M.', role: 'Real Estate Investor', text: 'Binuksan ng Infinity 8000 ang mga pintong hindi ko alam na nag-eexist. Ang community lang ay worth na ang bawat piso.' },
+  { name: 'Maria Santos', role: 'Business Owner', text: 'Ang network dito ay incredible. Nakapag-close ako ng tatlong deals sa mga connections na nagawa ko bilang member.' },
+  { name: 'Jose Reyes', role: 'Property Developer', text: 'Isang tunay na exclusive community. Ang quality ng mga members at opportunities dito ay walang katulad.' },
 ]
 
 export function HomeSection() {
@@ -69,12 +69,12 @@ export function HomeSection() {
           <h1 className="text-5xl md:text-7xl font-bold text-white leading-[1.05] tracking-tight mb-6"
             style={{ animation: 'fadeSlideDown 0.6s ease 0.1s both', fontFamily: 'Playfair Display, serif' }}>
             Build Wealth.<br />
-            <span className="text-[#f5c518]">Join the Circle.</span>
+            <span className="text-[#f5c518]">Sumali sa Circle.</span>
           </h1>
           <p className="text-lg md:text-xl text-white/75 max-w-2xl mx-auto mb-10 leading-relaxed"
             style={{ animation: 'fadeSlideDown 0.6s ease 0.2s both' }}>
-            Infinity 8000 Corporation is an exclusive real estate and investment community —
-            limited to 8,000 visionary members who are serious about building lasting wealth.
+            Ang Infinity 8000 Corporation ay isang exclusive real estate and investment community —
+            hanggang 8,000 na visionary members na seryoso sa pagbuo ng lasting wealth.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4"
             style={{ animation: 'fadeSlideDown 0.6s ease 0.3s both' }}>
@@ -123,8 +123,8 @@ export function HomeSection() {
             <span className="inline-block text-[#4aa027] font-semibold text-sm tracking-widest uppercase mb-3">Why Join Us</span>
             <h2 className="text-4xl md:text-5xl font-bold text-[#1a1a1a]"
               style={{ fontFamily: 'Playfair Display, serif' }}>
-              Everything You Need<br />
-              <span className="text-[#4aa027]">to Grow Your Wealth</span>
+              Lahat ng Kailangan Mo<br />
+              <span className="text-[#4aa027]">para Palaguin ang Iyong Wealth</span>
             </h2>
             <div className="w-16 h-1 bg-[#f5c518] rounded-full mx-auto mt-6" />
           </div>
@@ -149,7 +149,7 @@ export function HomeSection() {
           <div className="text-center mb-16">
             <span className="inline-block text-[#4aa027] font-semibold text-sm tracking-widest uppercase mb-3">Member Stories</span>
             <h2 className="text-4xl font-bold text-[#1a1a1a]" style={{ fontFamily: 'Playfair Display, serif' }}>
-              Hear from Our Community
+              Pakinggan ang Aming Community
             </h2>
             <div className="w-16 h-1 bg-[#f5c518] rounded-full mx-auto mt-5" />
           </div>
@@ -199,11 +199,10 @@ export function HomeSection() {
         <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4"
           style={{ fontFamily: 'Playfair Display, serif' }}>
           Spots Are Limited.<br />
-          <span className="text-[#f5c518]">Don't Miss Your Chance.</span>
-        </h2>
-        <p className="text-white/60 text-base leading-relaxed max-w-md mx-auto lg:mx-0">
-          Once all 8,000 membership slots are filled, new applications close permanently.
-          Secure your place in the Philippines' most exclusive investment community.
+          <span className="text-[#f5c518]">Huwag Mawalan ng Pagkakataon.</span>
+        </h2>          <p className="text-white/60 text-base leading-relaxed max-w-md mx-auto lg:mx-0">
+          Kapag napuno na ang lahat ng 8,000 membership slots, permanently nang isasara ang mga bagong applications.
+          Siguraduhin ang iyong place sa Pilipinas' most exclusive investment community.
         </p>
       </div>
 
@@ -222,14 +221,11 @@ export function HomeSection() {
               style={{ width: '15.5%', transition: 'width 1.5s ease' }} />
           </div>
           <p className="text-white/30 text-xs mt-1.5 text-right">6,760 slots remaining</p>
-        </div>
-
-        <a href="#contact"
+        </div>          <a href="#contact"
           className="group w-full inline-flex items-center justify-center gap-3 bg-[#f5c518] hover:bg-[#e0b010] text-[#1a1a1a] font-bold text-base px-8 py-4 rounded-xl transition-all duration-200 shadow-lg shadow-[#f5c518]/20 hover:-translate-y-0.5">
           Apply for Membership
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-        </a>
-        <p className="text-white/30 text-xs text-center">
+        </a>          <p className="text-white/30 text-xs text-center">
           Free to inquire · No commitment required
         </p>
       </div>

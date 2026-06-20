@@ -51,9 +51,7 @@ export function Navbar() {
 
         {/* Logo — clicks scroll back to top */}
         <a href="#home" onClick={e => scrollTo(e, '#home')} className="flex items-center gap-3 cursor-pointer">
-          <div className="w-9 h-9 rounded-full bg-brand-gradient flex items-center justify-center shadow-md flex-shrink-0">
-            <span className="text-white font-bold text-base" style={{ fontFamily: 'Playfair Display, serif' }}>∞</span>
-          </div>
+          <img src="/logo.png" alt="Infinity 8000 Corporation" className="w-10 h-10 rounded-full object-cover shadow-md flex-shrink-0" />
           <span className="font-bold text-white text-sm tracking-tight leading-tight hidden sm:block">
             Infinity<br /><span className="text-[#f5c518]">8000 Corp.</span>
           </span>

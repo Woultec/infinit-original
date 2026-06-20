@@ -1,4 +1,15 @@
 import { supabase } from './supabase'
+import { processPayment } from './paymentService'
+import { creditMemberStock } from './memberStockService'
+
+export interface CheckoutDetails {
+  fullName: string
+  contactNumber: string
+  address: string
+  deliveryNotes?: string
+  paymentChannel: 'gcash' | 'card' | 'cod'
+  receiptUrl?: string
+}
 
 export type OrderStatus =
   | 'pending'
@@ -138,16 +149,45 @@ export async function placeOrder(
   productId: string,
   quantity: number,
   useCoins = false,
+  checkoutDetails?: CheckoutDetails,
 ): Promise<string> {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Not authenticated')
+
+  // Encode checkout details as JSON in notes if provided
+  let notes: string | null = null
+  if (checkoutDetails) {
+    notes = JSON.stringify(checkoutDetails)
+  }
+
+  // For standard payments without checkout modal (legacy), process payment through gateway first
+  if (!useCoins && !checkoutDetails) {
+    const { data: productData, error: productError } = await supabase
+      .from('products')
+      .select('member_price')
+      .eq('id', productId)
+      .single()
+
+    if (productError) throw productError
+
+    const amount = productData.member_price * quantity
+
+    await processPayment(amount)
+  }
 
   const { data, error } = await supabase.rpc('place_order', {
     p_product_id: productId,
     p_quantity: quantity,
     p_use_coins: useCoins,
+    p_notes: notes,
   })
 
   if (error) throw error
+
+  // Credit the member's personal stock for resale
+  await creditMemberStock(productId, quantity).catch(err =>
+    console.error('Failed to credit member stock:', err),
+  )
+
   return data as string
 }
