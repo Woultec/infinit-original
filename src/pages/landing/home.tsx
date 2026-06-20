@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ArrowRight, Building2, TrendingUp, Shield, Star, ChevronDown, Users } from 'lucide-react'
+import { ArrowRight, Building2, TrendingUp, Shield, Star, ChevronDown } from 'lucide-react'
 
 function useCounter(target: number, duration = 2000, start = false) {
   const [count, setCount] = useState(0)
@@ -173,8 +172,7 @@ export function HomeSection() {
         </div>
       </section>
 
-      {/* ── CTA BAND ── */}
-     {/* ── CTA BAND ── */}
+       {/* ── CTA BAND ── */}
 <section className="relative py-24 overflow-hidden bg-[#1a1a1a]">
   {/* Subtle grid pattern */}
   <div className="absolute inset-0 opacity-10 pointer-events-none"

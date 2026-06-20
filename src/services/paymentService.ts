@@ -1,6 +1,4 @@
-import { supabase } from './supabase'
-
-export async function processPayment(amount: number): Promise<{ success: true }> {
+export async function processPayment(_amount: number): Promise<{ success: true }> {
   // Simulate payment gateway call
   // In a real implementation, this would call an external payment gateway API
   // For now, we simulate a payment with 90% success rate, 10% failure rate

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Users, User, Goal, Phone, FileText, Newspaper, MessageSquare, ShoppingBag, Coins, Wallet, Layers, TrendingDown } from 'lucide-react'
+import { LayoutDashboard, Package, Users, Goal, FileText, Newspaper, MessageSquare, ShoppingBag, Coins, Wallet, Layers, TrendingDown } from 'lucide-react'
 
 /** Application-wide constants */
 export const APP_NAME = 'Infinity 8K Corporation'

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { MapPin, Phone, Mail, Clock, ArrowRight, CheckCircle, Calendar, AlertCircle } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react'
 import { contactSchema, type ContactFormData } from '@lib/validations'
 import { supabase } from '@services/supabase'
 import { getUnavailableDates, type UnavailableDate } from '@services/inquiryService'
@@ -85,9 +85,9 @@ export function InquirySection() {
       if (error) throw error
       
       setSuccess(true)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Inquiry submission error:', err)
-      alert(err.message || 'Failed to send inquiry. Please try again.')
+      alert(err instanceof Error ? err.message : 'Failed to send inquiry. Please try again.')
     } finally {
       setLoading(false)
     }

@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '@services/supabase'
 import { useAuth } from '@hooks/useAuth'
 import { SUPER_ADMIN_EMAIL } from '@lib/constants'
 import {
   getPosts, addPost, updatePost, deletePost, uploadPostImage, type Post
 } from '@services/postService'
 import { 
-  Plus, Search, Filter, CheckCircle2, XCircle, Clock, 
-  FileText, Users, Shield, Send, MoreVertical, Trash2,
-  Image as ImageIcon, Upload, X
+  Plus, CheckCircle2, XCircle, 
+  FileText, Users, Trash2,
+  Upload, X
 } from 'lucide-react'
 import { useRef } from 'react'
 import { Input } from '@components/ui/Input'
@@ -69,8 +68,8 @@ export function AdminPost() {
       })
       setPosts(prev => [newPost, ...prev])
       handleCloseModal()
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to create post')
     } finally {
       setSaving(false)
     }
@@ -101,8 +100,8 @@ export function AdminPost() {
       }
       const updated = await updatePost(id, updates)
       setPosts(prev => prev.map(p => p.id === id ? { ...p, ...updated } : p))
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to update status')
     }
   }
 
@@ -111,8 +110,8 @@ export function AdminPost() {
     try {
       await deletePost(id)
       setPosts(prev => prev.filter(p => p.id !== id))
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to delete post')
     }
   }
 

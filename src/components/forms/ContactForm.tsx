@@ -43,9 +43,9 @@ export function ContactForm() {
 
       setSuccess(true)
       setForm({ name: '', email: '', subject: '', message: '' })
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Inquiry submission error:', err)
-      alert(err.message || 'Failed to send inquiry. Please try again.')
+      alert(err instanceof Error ? err.message : 'Failed to send inquiry. Please try again.')
     } finally {
       setLoading(false)
     }

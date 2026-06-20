@@ -10,7 +10,7 @@ import { SUPER_ADMIN_EMAIL } from '@lib/constants'
 import { 
   MessageSquare, Video, Mail, Calendar, 
   CheckCircle2, XCircle, Trash2, ExternalLink,
-  Search, Clock, User, CalendarOff, Plus, X,
+  Search, Clock, CalendarOff, Plus, X,
   ChevronDown, ChevronUp, Shield, AlertCircle
 } from 'lucide-react'
 import { Button } from '@components/ui/Button'
@@ -70,8 +70,8 @@ export function AdminInquiry() {
     try {
       const updated = await updateInquiryStatus(id, status)
       setInquiries(prev => prev.map(i => i.id === id ? updated : i))
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to update status')
     }
   }
 
@@ -115,9 +115,9 @@ export function AdminInquiry() {
 
       alert('Success! Meeting link saved and invitation email sent automatically to ' + selectedInquiry.email)
       handleCloseModal()
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err)
-      alert(err.message || 'Saved to database, but automated email failed.')
+      alert(err instanceof Error ? err.message : 'Saved to database, but automated email failed.')
       handleCloseModal()
     } finally {
       setSending(false)
@@ -131,8 +131,8 @@ export function AdminInquiry() {
       const updated = await setInquiryDate(dateInquiry.id, selectedDate)
       setInquiries(prev => prev.map(i => i.id === dateInquiry.id ? updated : i))
       handleCloseDateModal()
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to set date')
     }
   }
 
@@ -141,8 +141,8 @@ export function AdminInquiry() {
     try {
       await deleteInquiry(id)
       setInquiries(prev => prev.filter(i => i.id !== id))
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to delete inquiry')
     }
   }
 
@@ -154,8 +154,8 @@ export function AdminInquiry() {
       setUnavailableDates(prev => [...prev, added].sort((a, b) => a.date.localeCompare(b.date)))
       setNewUnavailDate('')
       setNewUnavailReason('')
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to add unavailable date')
     } finally {
       setAddingUnavail(false)
     }
@@ -165,8 +165,8 @@ export function AdminInquiry() {
     try {
       await removeUnavailableDate(id)
       setUnavailableDates(prev => prev.filter(d => d.id !== id))
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to remove unavailable date')
     }
   }
 

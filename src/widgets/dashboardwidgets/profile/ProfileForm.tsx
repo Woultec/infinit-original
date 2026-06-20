@@ -35,8 +35,8 @@ export function ProfileForm() {
           setContacts(data.contacts || '')
           setAvatarUrl(data.avatar_url || '')
         }
-      } catch (err: any) {
-        setError(err.message || 'Failed to load profile')
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to load profile')
       } finally {
         setIsLoading(false)
       }
@@ -67,8 +67,8 @@ export function ProfileForm() {
       setProfile(updated)
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
-    } catch (err: any) {
-      setError(err.message || 'Failed to upload avatar')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to upload avatar')
     } finally {
       setIsUploading(false)
     }
@@ -94,8 +94,8 @@ export function ProfileForm() {
       setProfile(updated)
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
-    } catch (err: any) {
-      setError(err.message || 'Failed to update profile')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to update profile')
     } finally {
       setIsSaving(false)
     }

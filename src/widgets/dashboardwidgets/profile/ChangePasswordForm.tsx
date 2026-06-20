@@ -34,8 +34,8 @@ export function ChangePasswordForm() {
       setPassword('')
       setConfirmPassword('')
       setTimeout(() => setSuccess(false), 3000)
-    } catch (err: any) {
-      setError(err.message || 'Failed to update password')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to update password')
     } finally {
       setIsSaving(false)
     }

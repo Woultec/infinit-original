@@ -130,9 +130,7 @@ export function MemberProduct() {
         })
         await loadProducts()
       } catch (err: unknown) {
-        const text =
-          (err && typeof err === 'object' && 'message' in err && String(err.message)) ||
-          'Could not place order. Please try again.'
+        const text = err instanceof Error ? err.message : 'Could not place order. Please try again.'
         setMessage({ type: 'error', text })
       } finally {
         setBuyingId(null)
@@ -165,25 +163,20 @@ export function MemberProduct() {
   }
 
   const handleContinueToConfirm = () => {
-    console.log('[DEBUG] handleContinueToConfirm called', { checkoutForm })
     setCheckoutError(null)
     // Validate form before showing confirmation
     if (!checkoutForm.fullName.trim()) {
       setCheckoutError('Please enter your full name.')
-      console.log('[DEBUG] validation failed: fullName')
       return
     }
     if (!checkoutForm.contactNumber.trim()) {
       setCheckoutError('Please enter your contact number.')
-      console.log('[DEBUG] validation failed: contactNumber')
       return
     }
     if (!checkoutForm.address.trim()) {
       setCheckoutError('Please enter your delivery address.')
-      console.log('[DEBUG] validation failed: address')
       return
     }
-    console.log('[DEBUG] validation passed, setting checkoutStep to confirm')
     setCheckoutStep('confirm')
   }
 
@@ -227,9 +220,7 @@ export function MemberProduct() {
       })
       await loadProducts()
     } catch (err: unknown) {
-      const text =
-        (err && typeof err === 'object' && 'message' in err && String(err.message)) ||
-        'Could not place order. Please try again.'
+      const text = err instanceof Error ? err.message : 'Could not place order. Please try again.'
       setMessage({ type: 'error', text })
     } finally {
       setBuyingId(null)

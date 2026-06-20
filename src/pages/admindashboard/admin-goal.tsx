@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '@services/supabase'
 import { useAuth } from '@hooks/useAuth'
 import { SUPER_ADMIN_EMAIL } from '@lib/constants'
 import {
@@ -7,8 +6,8 @@ import {
 } from '@services/goalService'
 import { 
   Plus, CheckCircle2, XCircle, Clock, 
-  Target, Calendar, AlertCircle, Trash2,
-  ChevronRight, Flag, Star, Shield
+  Target, Calendar, Trash2,
+  Star, Shield
 } from 'lucide-react'
 import { Input } from '@components/ui/Input'
 import { Button } from '@components/ui/Button'
@@ -72,8 +71,8 @@ export function AdminGoal() {
       })
       setShowAddModal(false)
       setForm({ title: '', description: '', milestone_date: '', priority: 'Medium', status: 'Pending' })
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to save goal')
     } finally {
       setSaving(false)
     }
@@ -87,8 +86,8 @@ export function AdminGoal() {
       }
       const updated = await updateGoal(id, updates)
       setGoals(prev => prev.map(g => g.id === id ? { ...g, ...updated } : g))
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to update status')
     }
   }
 
@@ -97,8 +96,8 @@ export function AdminGoal() {
     try {
       await deleteGoal(id)
       setGoals(prev => prev.filter(g => g.id !== id))
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to delete goal')
     }
   }
 

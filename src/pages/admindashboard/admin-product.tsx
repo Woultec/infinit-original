@@ -120,15 +120,18 @@ export function AdminProduct() {
           coin_price: parseFloat(form.coin_price) || 0,
           stock: parseInt(form.stock),
           image_url,
+          created_by: user?.id ?? '',
         })
         setProducts(prev => [newProduct, ...prev])
       }
       resetForm()
-    } catch (err: any) {
-      if (err.code === '23505' || err.message?.includes('products_sku_key')) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Something went wrong.'
+      const code = err && typeof err === 'object' && 'code' in err ? String((err as Record<string, unknown>).code) : ''
+      if (code === '23505' || msg.includes('products_sku_key')) {
         setError("A product with this SKU already exists. Please use a unique SKU.")
       } else {
-        setError(err.message ?? "Something went wrong.")
+        setError(msg)
       }
     } finally {
       setSaving(false)
@@ -139,8 +142,8 @@ export function AdminProduct() {
     try {
       const updated = await updateProduct(id, { status })
       setProducts(prev => prev.map(p => p.id === id ? updated : p))
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to update product')
     }
   }
 
@@ -148,8 +151,8 @@ export function AdminProduct() {
     try {
       await deleteProductWithImage(product)
       setProducts(prev => prev.filter(p => p.id !== product.id))
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to delete product')
     }
   }
 

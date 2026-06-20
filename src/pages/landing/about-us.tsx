@@ -1,4 +1,4 @@
-import { ArrowRight, Target, Eye, Heart, Shield } from 'lucide-react'
+import { ArrowRight, Target, Eye, Heart } from 'lucide-react'
 
 const values = [
   { icon: Target, title: 'Mission', text: "Lumikha ng isang makapangyarihang at exclusive community ng 8,000 investors at real estate enthusiasts na nagsusuportahan sa isa't isa sa pagbuo ng lasting, generational wealth." },
